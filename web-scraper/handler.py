@@ -1,5 +1,5 @@
+from bs4 import BeautifulSoup, Comment
 import requests
-from bs4 import BeautifulSoup
 import json
 
 def handle(req):
@@ -7,13 +7,26 @@ def handle(req):
     Args:
         req (str): request body
     """
-    req = json.loads(req)  # Parse JSON input
-    url = req['url']  # Extract URL from JSON
-
-    response = requests.get(url)
+    response = requests.get(req)
     soup = BeautifulSoup(response.text, 'html.parser')
 
-    # Extract title of the page
-    page_title = soup.title.string
+    # Remove script and style elements
+    for script in soup(["script", "style"]):
+        script.decompose()
 
-    return page_title
+    # Remove comments
+    for element in soup(text=lambda text: isinstance(text, Comment)):
+        element.extract()
+
+    # Get page text
+    page_text = ' '.join(soup.stripped_strings)
+
+    # Extract title of the page
+    page_title = soup.title.string if soup.title else "No title"
+
+    result = {
+        'title': page_title,
+        'content': page_text,
+    }
+
+    return json.dumps(result)

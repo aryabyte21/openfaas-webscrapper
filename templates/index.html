@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Web Scraper</title>
-</head>
 <body>
-    <form method="POST">
-        <label for="url">URL:</label>
-        <input type="text" id="url" name="url">
-        <label for="schedule">Schedule:</label>
-        <input type="text" id="schedule" name="schedule">
-        <input type="submit" value="Submit">
-    </form>
+<h2>Webpage Title Extractor</h2>
+
+<form method="POST">
+  <input type="text" id="url" name="url" required>
+  <input type="submit" value="Submit">
+</form>
+
+<p>{{ title }}</p>
+
 </body>
 </html>
